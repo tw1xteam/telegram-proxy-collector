@@ -1,120 +1,174 @@
-# 🛡️ Telegram Proxy Collector: Anti-Censorship Edition
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Runnin4ik/dpi-detector/main/images/logo.jpg" width="100%">
+  <br>
+  <i>«Маяк у гаснущего горизонта свободного интернета»</i><br>
+  Сквозь цифровые сумерки. Смотритель маяка, <a href="https://github.com/Runnin4ik"><b>Runni</b></a>
+</p>
 
+# 🔍 DPI Detector
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Docker](https://img.shields.io/badge/docker-ready-brightgreen.svg)](https://github.com/Runnin4ik/dpi-detector/pkgs/container/dpi-detector)
 
+Инструмент для анализа цензуры трафика в России: обнаруживает и классифицирует блокировки сайтов, хостингов и CDN (TCP16-20 блокировки), а также подмену DNS-запросов провайдером.
 
+> <b>Инструмент был полезен? Поставь ⭐ в качестве «спасибо»!</b>
 
+![Пример результатов](https://raw.githubusercontent.com/Runnin4ik/dpi-detector/main/images/screenshot.png)
 
-**Умный комбайн для сбора MTProto прокси.**  
-В отличие от обычных парсеров, этот скрипт анализирует секрет (Secret) каждого прокси и определяет, под какой сайт он маскируется. Это критически важно для работы в условиях жестких блокировок (DPI). [github](https://github.com/kort0881/telegram-proxy-collector)
+## 🎯 Возможности
 
-***
+- **TCP 16-20KB блокировка** — обнаруживает обрыв соединения к CDN и хостингам после передачи 14-34KB
+- **Подбор белых SNI для AS хостингов/CDN**
+- **Проверка доступности заблокированных сайтов** — тестирует TLS 1.2, TLS 1.3 и HTTP
+- **Проверка DNS** — выявляет перехват UDP/53, подмену IP-адресов заглушками и блокировку DoH
+- **Классификация ошибок** — различает TCP RST, Connection Abort,
+  Handshake/Read Timeout, TLS MITM, SNI-блокировку и другие
+- **Гибкая настройка** — таймауты, потоки, свои списки доменов, DNS-серверы
+  и IPv4-only режим
 
-## 🛠️ Community Tools: Утилиты от пользователей
+> [!WARNING]  
+> Если у вас запущены средства обхода блокировок (например, zapret или GoodbyeDPI), результаты тестов будут искажены. Чтобы узнать реальное состояние фильтров вашего провайдера, выключите их перед началом проверки или убедитесь, что они работают в режиме обработки всех пакетов (режим ALL), а не только по списку.
 
-| Инструмент | Описание | Автор |
-| :--- | :--- | :--- |
-| **[Parser-telegram-proxies](https://github.com/ComradeBingo/Parser-telegram-proxies-list/)** | Удобная Windows-утилита для парсинга и проверки прокси с отображением пинга в реальном времени. **Обновил версию для винды (исправил периодические блокировки запросов к .txt со стороны гитхаба - http request теперь).** | [ComradeBingo](https://github.com/ComradeBingo) |
-| **[Proxy-Telegram-Android](https://github.com/ComradeBingo/Proxy-Telegram-Android)** | Приложение для парсинга прокси для Telegram на Android с проверкой доступности и пинга серверов. | [ComradeBingo](https://github.com/ComradeBingo)  [github](https://github.com/ComradeBingo/Proxy-Telegram-Android)
-| **[Proxy-telegram-windows](https://github.com/ComradeBingo/Proxy-telegram-windows)** | Парсер прокси серверов для Telegram на Windows. Обновлено до версии 1.2: переработан GUI, добавлено меню справки. | [ComradeBingo](https://github.com/ComradeBingo)  [github](https://github.com/ComradeBingo/Proxy-telegram-windows/releases) |
+### ⚙️ Кастомизация
+Следующие файлы могут быть переопределены. Инструкции ниже.
 
+1.  `domains.txt` — список доменов для проверки.
+2.  `tcp16.json` — цели для теста TCP 16-20KB.
+3.  `config.yml` — конфигурация.
+4.  `whitelist_sni.txt` — список белых SNI для подбора рабочих
 
-***
+### ⚙️ Запуск с параметрами (CLI)
 
-## 🔥 Актуальные списки (обновляются автоматически)
+| Параметр              | Описание                                                            | Пример использования         |
+|:----------------------|:--------------------------------------------------------------------|:-----------------------------|
+| `-t`, `--tests`       | Указать номера тестов (без меню).                                   | `-t 123` или `-t 4`          |
+| `-p`, `--proxy`       | Использовать прокси (переопределяет `PROXY_URL`).                   | `-p socks5://127.0.0.1:1080` |
+| `-d`, `--domain`      | Проверка отдельных доменов. Игнорирует `domains.txt`                | `-d vk.com -d youtube.com`   |
+| `-c`, `--concurrency` | Количество конкурентных запросов (переопределяет `MAX_CONCURRENT`). | `-c 50`                      |
+| `-o`, `--output`      | Автоматически сохранить лог в указанный файл.                       | `-o report_log.txt`          |
+| `--batch`             | Отключает все вопросы и паузы в консоли.                            | `--batch`                    |
 
-Скрипт каждый час запускается через GitHub Actions, собирает свежие MTProto‑прокси, фильтрует и проверяет их, а затем обновляет файлы в этом репозитории. [github](https://github.com/kort0881/telegram-proxy-collector)
+## 🐋 Docker (Рекомендовано)
 
-Прямые ссылки для вставки в Telegram или свои программы:
-
-| 🇷🇺 **RU Сегмент** (Top Tier) | 🇪🇺 **EU / Global** | 🌍 **Все прокси** |
-| :--- | :--- | :--- |
-| **[proxy_ru.txt](https://raw.githubusercontent.com/kort0881/telegram-proxy-collector/main/proxy_ru.txt)** | **[proxy_eu.txt](https://raw.githubusercontent.com/kort0881/telegram-proxy-collector/main/proxy_eu.txt)** | **[proxy_all.txt](https://raw.githubusercontent.com/kort0881/telegram-proxy-collector/main/proxy_all.txt)** |
-| *Маскировка под Yandex, VK, Mail.ru, Gosuslugi и др.* | *Маскировка под Google, Amazon, Microsoft и др.* | *Полный микс всех проверенных серверов* |
-| ✅ **Лучшие для РФ и Ирана** | ✅ **Высокая скорость и стабильность** | ✅ **Максимальное количество прокси** |
-
-> ⚙️ GitHub Actions сохраняет результаты в `verified/`, а затем копирует их в `proxy_ru.txt`, `proxy_eu.txt` и `proxy_all.txt` в корне репозитория, так что ссылки выше всегда ведут на свежие списки.
-
-***
-
-## 📱 Использование с телефона 
-
-Если вы открыли этот репозиторий с телефона и хотите быстро подключить MTProto‑прокси без копипасты:
-
-**Откройте страницу:**
-
-[https://kort0881.github.io/telegram-proxy-collector/mobile.html](https://kort0881.github.io/telegram-proxy-collector/mobile.html)
-
-Там вы увидите кнопки:
-
-> «Подключить прокси #1», «Подключить прокси #2», ...
-
-При нажатии:
-
-1. Браузер откроет ссылку вида `https://t.me/proxy?server=...&port=...&secret=...`.
-2. Telegram спросит: «Подключиться к прокси?» — подтвердите, и прокси будет включён.
-
-Страница `mobile.html` автоматически читает файл `verified/proxy_links_tme_clean.txt`, который генерирует этот репозиторий, и превращает каждую строку в отдельную кнопку.
-
-***
-
-## 🚀 Как это работает?
-
-Скрипт запускается каждые 4 часа через GitHub Actions и выполняет 4 этапа:
-
-1. **Сбор (Harvesting)**
-   - Скачивает «сырые» прокси из нескольких открытых источников (GitHub‑репозитории, TXT, JSON‑API).
-   - Использует агрессивный Regex‑парсинг, чтобы вытащить MTProto‑ссылки из любого мусора (tg://proxy, t.me/proxy, host:port:secret, JSON).
-
-2. **Декодирование (Deep Analysis)**
-   - Расшифровывает `Fake‑TLS` секреты (начинаются на `ee...`).
-   - Извлекает домен, под который маскируется трафик (Yandex, VK, Mail.ru, Gosuslugi, Google, Amazon и т.д.).
-
-3. **Фильтрация (Smart Filter)**
-   - ⛔ **Blacklist:** отбрасывает прокси, маскирующиеся под заведомо заблокированные ресурсы (Instagram, Facebook, Twitter, BBC, Meduza и т.п.), чтобы не тратить трафик впустую в РФ.
-   - ✅ **RU‑маркер:** помечает прокси как `ru`, если домен секрета содержит `yandex`, `vk.com`, `mail.ru`, `sber`, `gosuslugi`, `ozon`, `wildberries` и другие популярные RU‑сервисы.
-
-4. **Проверка (Checking)**
-   - Пингует каждый прокси через TCP (или Telethon MTProto, если указаны `API_ID` / `API_HASH`).
-   - Измеряет реальный отклик (ping) и доступность порта (по умолчанию `timeout = 2s`).
-   - Для каждой пары `(host, port)` оставляет только самый быстрый вариант.
-
-Результат сохраняется в нескольких форматах:
-
-- `proxy_ru.txt`, `proxy_eu.txt`, `proxy_all.txt` — готовые списки `tg://proxy?...` для быстрого импорта в Telegram.
-- `verified/proxy_*_verified.txt` — те же списки, разложенные по регионам (RU / EU / All).
-- `verified/proxy_all_tme_verified.txt` — ссылки `https://t.me/proxy?server=...` (удобно кидать людям).
-- `verified/proxy_all_verified.json` — подробный JSON с полями `host`, `port`, `secret`, `ping`, `region`, `domain`, `method` (TCP_OK / Telethon_OK).
-- `verified/proxy_stats_verified.json` — статистика по запуску (кол‑во сырья, верифицированных прокси, лучший пинг и т.п.).
-
-***
-
-## 🔗 Мои проекты
-
-| Проект | Описание | Ссылка |
-| :--- | :--- | :--- |
-| **VPN KEY VLESS** | Основной канал с конфигами и новостями | [Telegram](https://t.me/vlesstrojan) |
-| **KiberSos New** | Резервный канал связи | [Telegram](https://t.me/kibersosnew) |
-| **VlessBots** | Бот для выдачи ключей | [Bot](https://t.me/vlessbots_bot) |
-| **Internet Access** | Сайт проекта | [Website](https://kort0881.github.io/internet-access-site/) |
-| **VPN Key Repo** | Репозиторий скриптов VLESS | [GitHub](https://github.com/kort0881/vpn-key-vless) |
-
-***
-
-## 🛠️ Локальный запуск (для разработчиков)
-
-Если хотите запустить сборщик на своём ПК:
-
+### Быстрый старт
+Docker проверит наличие обновлений и скачает свежую версию перед запуском
 ```bash
-# 1. Клонировать репозиторий
-git clone [https://github.com/kort0881/telegram-proxy-collector.git](https://github.com/kort0881/telegram-proxy-collector.git)
-cd telegram-proxy-collector
-
-# 2. Установить зависимости
-pip install requests telethon
-
-# 3. Запустить (TCP-проверка)
-python main.py
-
-# или с ограничением по топу и пользовательской папкой вывода:
-python main.py --top 200 --output-dir verified
+docker run --rm -it --pull=always ghcr.io/runnin4ik/dpi-detector:latest
 ```
+Или запускайте с указанием определенной версии  
+Это избавляет от постоянных скачиваний, но нужно следить за актуальностью версий
+```bash
+docker run --rm -it ghcr.io/runnin4ik/dpi-detector:3.3.0
+```
+
+#### С кастомизацией
+Переопределите нужные файлы: `domains.txt`, `tcp16.json`...
+Запустите с монтированием (можно монтировать один или несколько файлов)
+```bash
+# Bash (Linux / macOS)
+docker run --rm -it --pull=always \
+  -v $(pwd)/domains.txt:/app/domains.txt \
+  -v $(pwd)/tcp16.json:/app/tcp16.json \
+  -v $(pwd)/config.yml:/app/config.yml \
+  -v $(pwd)/whitelist_sni.txt:/app/whitelist_sni.txt \
+  ghcr.io/runnin4ik/dpi-detector:latest -t 123 -d discord.com
+```
+<details>
+<summary>Команды для PowerShell и CMD</summary>
+
+PowerShell (Windows)
+```bash
+docker run --rm -it --pull=always `
+  -v ${PWD}/domains.txt:/app/domains.txt `
+  -v ${PWD}/tcp16.json:/app/tcp16.json `
+  -v ${PWD}/config.yml:/app/config.yml `
+  -v ${PWD}/whitelist_sni.txt:/app/whitelist_sni.txt `
+  ghcr.io/runnin4ik/dpi-detector:latest
+```
+
+CMD (Windows)
+```bash
+docker run --rm -it --pull=always ^
+  -v %cd%/domains.txt:/app/domains.txt ^
+  -v %cd%/tcp16.json:/app/tcp16.json ^
+  -v %cd%/config.yml:/app/config.yml ^
+  -v %cd%/whitelist_sni.txt:/app/whitelist_sni.txt ^
+  ghcr.io/runnin4ik/dpi-detector:latest
+```
+</details>
+
+## 🐍 Python 3.8+
+**Требования:** httpx[socks,http2]>=0.28.1, rich>=14.3.2, PyYAML>=6.0.3
+
+**Установка:**
+```bash
+# скачайте и распакуйте архив руками, или:
+git clone https://github.com/Runnin4ik/dpi-detector.git
+cd dpi-detector
+python -m pip install -r requirements.txt
+```
+
+**Запуск:**
+```bash
+python dpi_detector.py
+# или с параметрами
+python dpi_detector.py -t 2 -d discord.com -p socks5://127.0.0.1:1080
+```
+
+## 🪟 Windows (Готовые сборки)
+
+Для использования программы не обязательно устанавливать Python. Скачайте подходящий `.exe` файл в разделе [Releases -> Assets](https://github.com/Runnin4ik/dpi-detector/releases):
+
+*   **[Скачать для Windows 10 / 11](https://github.com/Runnin4ik/dpi-detector/releases/download/v3.3.0/dpi_detector_v3.3.0_win10.exe)**
+*   **[Скачать для Windows 7 / 8](https://github.com/Runnin4ik/dpi-detector/releases/download/v3.3.0/dpi_detector_v3.3.0_win7.exe)**
+
+#### С кастомизацией
+
+Переопределите нужные файлы: `domains.txt`, `tcp16.json`, `config.yml`, `whitelist_sni.txt`
+И положите их в папку рядом с `.exe` файлом.
+
+## 🤝 Вклад в проект
+Приветствуются Issue и Pull Request'ы и предложения функционала!
+
+## 📜 Лицензия
+
+[MIT License](LICENSE) — свободное использование, модификация и распространение.
+
+## ⚠️ Дисклеймер
+
+Этот инструмент предназначен исключительно для образовательных и диагностических целей. Автор не несет ответственности за использование данного ПО.
+
+## 🙏 Благодарности
+
+- Проекту [hyperion-cs/dpi-checkers](https://github.com/hyperion-cs/dpi-checkers) за вдохновение
+- **0ka** за помощь и консультации
+
+## 👀Похожие проекты
+Советуем также взглянуть:
+- [hyperion-cs/dpi-ch](https://github.com/hyperion-cs/dpi-checkers/tree/main/ru/dpi-ch) — _DPI comprehensive checker (go)_
+
+## 💖 Поддержка проекта
+
+### [Картой или по СБП](https://pay.cloudtips.ru/p/1421d4c7)
+
+| Валюта   | Сеть   | Адрес                                              |
+|----------|--------|----------------------------------------------------|
+| **USDT** | TRC20  | `TGtcb4JMT5F3KiEL16oZnj9ijB2Pag1jCX`               |
+| **USDT** | ERC20  | `0x97413028546b5da4cbba4d9838c9d635a5333ab1`       |
+| **USDT** | TON    | `UQApgV57_p0hQGBV9oxrDi7SvKqgN3pigw5YEA28VShrZ7X_` |
+| **TON**  |        | `UQApgV57_p0hQGBV9oxrDi7SvKqgN3pigw5YEA28VShrZ7X_` |
+| **BNB**  | BEP-20 | `0x97413028546b5da4cbba4d9838c9d635a5333ab1`       |
+| **SOL**  |        | `9obMiD8hYfs4D8XskQjHPPtAKYPq9CaEZTbBMxtCjQ3k`     |
+| **BTC**  |        | `bc1q7579xpmxcrz34lzmrxfupkpcczvemeqk2e9f4h`       |
+| **ETH**  |        | `0x97413028546b5da4cbba4d9838c9d635a5333ab1`       |
+
+## Star History
+
+<a href="https://www.star-history.com/#Runnin4ik/dpi-detector&type=date&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=Runnin4ik/dpi-detector&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=Runnin4ik/dpi-detector&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=Runnin4ik/dpi-detector&type=date&legend=top-left" />
+ </picture>
+</a>
