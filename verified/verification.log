@@ -1,171 +1,171 @@
-Verification log – 2026-05-26 03:30:15 UTC
-Execution time: 44.0s
+Verification log – 2026-05-26 07:37:36 UTC
+Execution time: 39.5s
 Total proxies tested: 141
-Working proxies found: 39
+Working proxies found: 36
 ------------------------------------------------------------
 Timestamp                   Host:Port                      Status Ping     Region
 ------------------------------------------------------------
-2026-05-26T03:30:09.458012  87.248.132.2:443               FAIL   -        eu
-2026-05-26T03:30:09.468481  speed.chunkycorp.shop:443      FAIL   -        ru
-2026-05-26T03:30:09.470016  Komatso-Japan.www.google.com.ganool-com.info:300 FAIL   -        eu
-2026-05-26T03:30:09.480610  ader.dynoporo.com:443          FAIL   -        eu
-2026-05-26T03:30:09.582529  186.246.21.34:443              OK     0.144s   eu
-2026-05-26T03:30:09.584861  87.248.134.204:443             FAIL   -        eu
-2026-05-26T03:30:09.591963  87.248.134.172:443             FAIL   -        eu
-2026-05-26T03:30:09.592269  89.35.131.217:443              OK     0.148s   ru
-2026-05-26T03:30:09.593607  23.88.51.230:443               OK     0.155s   eu
-2026-05-26T03:30:09.595828  Q4.opt-meli.info:443           OK     0.153s   eu
-2026-05-26T03:30:09.598162  178.105.150.126:443            OK     0.151s   eu
-2026-05-26T03:30:09.598503  195.133.20.10:443              FAIL   -        eu
-2026-05-26T03:30:09.598935  s.proxytg.space:8443           FAIL   -        eu
-2026-05-26T03:30:09.603674  2.26.99.245:8443               OK     0.155s   eu
-2026-05-26T03:30:09.604076  hop3.proxytg.space:443         FAIL   -        ru
-2026-05-26T03:30:09.604359  92.118.234.215:443             OK     0.162s   eu
-2026-05-26T03:30:09.605204  g.proxytg.space:8443           FAIL   -        eu
-2026-05-26T03:30:09.605526  91.107.189.181:8443            OK     0.156s   eu
-2026-05-26T03:30:09.606106  artt.proxytg.space:443         FAIL   -        ru
-2026-05-26T03:30:09.606275  45.135.194.28:37               FAIL   -        eu
-2026-05-26T03:30:09.606287  dr1.dedus.pro:443              OK     0.168s   ru
-2026-05-26T03:30:09.607882  tproxy.ink:443                 OK     0.15s    ru
-2026-05-26T03:30:09.609815  hop2.proxytg.space:443         FAIL   -        ru
-2026-05-26T03:30:09.613490  176.125.240.195:443            OK     0.175s   ru
-2026-05-26T03:30:09.617376  tproxy.mom:8090                OK     0.161s   ru
-2026-05-26T03:30:09.618211  91.107.255.20:2053             FAIL   -        eu
-2026-05-26T03:30:09.618578  rus2.mtproxygram.pro:443       FAIL   -        ru
-2026-05-26T03:30:09.623041  q.hq-1337.win:443              FAIL   -        ru
-2026-05-26T03:30:09.623445  alpinavpn.hatecens.cc:7443     OK     0.177s   eu
-2026-05-26T03:30:09.626688  syntax.ddnscdn.sbs.:443        OK     0.178s   eu
-2026-05-26T03:30:09.629860  Ashkoda-Best.gabrial-batistuta.shop:443 FAIL   -        eu
-2026-05-26T03:30:09.630274  vaslshid.co.uk.:85             OK     0.182s   eu
-2026-05-26T03:30:09.635575  3.masi.masi.zban-mas.info:8888 FAIL   -        eu
-2026-05-26T03:30:09.635781  weblog.forwarding-co.site:443  FAIL   -        eu
-2026-05-26T03:30:09.638271  dreams.nolags.pw:443           OK     0.186s   eu
-2026-05-26T03:30:09.639297  31.56.229.49:443               FAIL   -        eu
-2026-05-26T03:30:09.639905  s24.neo-trading.org:443        OK     0.194s   ru
-2026-05-26T03:30:09.640016  Shoting.forwarding-co.site.:44300 FAIL   -        eu
-2026-05-26T03:30:09.643479  dream.nolags.pw:443            FAIL   -        eu
-2026-05-26T03:30:09.650189  s11.neo-trading.org:993        OK     0.195s   eu
-2026-05-26T03:30:09.652225  s13.neo-trading.org:993        OK     0.195s   eu
-2026-05-26T03:30:09.665745  Team.hafthashtgswreqetdgsrwrpi-esoiiisolfnwfsksjvwu-urishklfduiwoehv.info.:6773 FAIL   -        eu
-2026-05-26T03:30:09.702205  plg-proxy.duckdns.org:9443     FAIL   -        eu
-2026-05-26T03:30:09.728684  186.246.16.232:443             FAIL   -        eu
-2026-05-26T03:30:09.737034  www.tproxy.monster:2053        OK     0.288s   ru
-2026-05-26T03:30:09.751202  195.133.20.10:443              FAIL   -        eu
-2026-05-26T03:30:09.755801  r1.proxytg.space:8443          FAIL   -        eu
-2026-05-26T03:30:09.756415  195.133.20.10:443              FAIL   -        eu
-2026-05-26T03:30:09.765599  62.60.228.136:443              OK     0.167s   ru
-2026-05-26T03:30:09.769723  31.207.5.58:443                OK     0.164s   ru
-2026-05-26T03:30:09.773499  dr4.dedus.pro:443              OK     0.168s   ru
-2026-05-26T03:30:09.783563  www.tproxy.ink:443             OK     0.153s   ru
-2026-05-26T03:30:09.789787  tproxy.monster:2053            OK     0.347s   ru
-2026-05-26T03:30:09.792720  server-1.shustrik.world:443    OK     0.169s   ru
-2026-05-26T03:30:09.795394  89.167.103.249:443             OK     0.177s   eu
-2026-05-26T03:30:09.796032  178.105.141.172:443            OK     0.16s    eu
-2026-05-26T03:30:09.797104  r7.proxytg.space:8443          OK     0.354s   eu
-2026-05-26T03:30:09.797591  another.life.mambabot.net:4515 OK     0.168s   eu
-2026-05-26T03:30:09.798236  146.103.104.26:443             FAIL   -        eu
-2026-05-26T03:30:09.798459  win.sosproxy.space:443         OK     0.354s   eu
-2026-05-26T03:30:09.804231  m.proxytg.space:8443           FAIL   -        eu
-2026-05-26T03:30:09.806107  babs.proxytg.space:443         FAIL   -        eu
-2026-05-26T03:30:09.812671  r6.proxytg.space:8443          OK     0.357s   eu
-2026-05-26T03:30:09.834299  dns.vdl.lat:853                OK     0.217s   ru
-2026-05-26T03:30:09.847980  www.humaontop.space:443        FAIL   -        eu
-2026-05-26T03:30:09.929375  mt.nowaboost.com:853           OK     0.492s   eu
-2026-05-26T03:30:09.953029  Fuck-War.harcibasheokeye.ir:110 FAIL   -        eu
-2026-05-26T03:30:09.985471  www.tproxy.mom:8090            OK     0.39s    ru
-2026-05-26T03:30:09.991272  s15.proxyru.top:993            OK     0.368s   eu
-2026-05-26T03:30:10.021240  mt.nowabst.com:853             OK     0.571s   ru
-2026-05-26T03:30:10.340744  best-ruter.eyvazi-master.ir:9741 FAIL   -        eu
-2026-05-26T03:30:11.438651  163.5.31.10:8443               FAIL   -        eu
-2026-05-26T03:30:11.439450  91.239.192.153:9443            FAIL   -        eu
-2026-05-26T03:30:11.439477  116.203.134.165:443            FAIL   -        eu
-2026-05-26T03:30:11.441469  195.254.165.212:9443           FAIL   -        eu
-2026-05-26T03:30:11.441481  185.3.200.185:2053             FAIL   -        eu
-2026-05-26T03:30:11.441771  185.84.157.102:9443            FAIL   -        eu
-2026-05-26T03:30:11.441884  91.239.192.154:7443            FAIL   -        eu
-2026-05-26T03:30:11.441895  185.3.200.136:4455             FAIL   -        eu
-2026-05-26T03:30:11.442451  195.254.165.251:25565          FAIL   -        eu
-2026-05-26T03:30:11.442518  93.183.88.188:443              FAIL   -        eu
-2026-05-26T03:30:11.442569  185.3.200.191:2053             FAIL   -        eu
-2026-05-26T03:30:11.443426  212.34.135.78:443              FAIL   -        eu
-2026-05-26T03:30:11.446430  87.248.132.34:70               FAIL   -        eu
-2026-05-26T03:30:11.446546  195.254.165.249:25565          FAIL   -        eu
-2026-05-26T03:30:11.446559  176.65.135.65:23               FAIL   -        eu
-2026-05-26T03:30:11.447466  195.254.165.233:65535          FAIL   -        eu
-2026-05-26T03:30:11.447519  195.254.165.73:9443            FAIL   -        eu
-2026-05-26T03:30:11.447575  195.254.165.168:9443           FAIL   -        eu
-2026-05-26T03:30:11.448408  194.120.230.106:433            FAIL   -        eu
-2026-05-26T03:30:11.449425  72.56.41.35:443                FAIL   -        eu
-2026-05-26T03:30:11.449519  5.75.197.246:443               FAIL   -        eu
-2026-05-26T03:30:11.451420  dd.tgproxy.today:8080          FAIL   -        eu
-2026-05-26T03:30:11.452172  sitemcinet.co.uk:443           FAIL   -        eu
-2026-05-26T03:30:11.452181  sabr.ssboriat.co.uk:531        FAIL   -        eu
-2026-05-26T03:30:11.453458  87.248.132.38:85               FAIL   -        eu
-2026-05-26T03:30:11.453507  collider.web-yektanet-com.info:443 FAIL   -        eu
-2026-05-26T03:30:11.454503  195.254.165.71:9443            FAIL   -        eu
-2026-05-26T03:30:11.454513  77.72.80.82:9443               FAIL   -        eu
-2026-05-26T03:30:11.454557  new.sitemcinet.co.uk:443       FAIL   -        eu
-2026-05-26T03:30:11.455445  195.254.165.211:4455           FAIL   -        eu
-2026-05-26T03:30:11.455519  82.114.228.74:443              FAIL   -        ru
-2026-05-26T03:30:11.456420  91.107.155.175:2053            FAIL   -        eu
-2026-05-26T03:30:11.456507  185.3.200.172:2053             FAIL   -        eu
-2026-05-26T03:30:11.456561  www.myssscript.beauty.:8888    FAIL   -        eu
-2026-05-26T03:30:11.457409  www.merco-karco.website:443    FAIL   -        eu
-2026-05-26T03:30:11.457743  195.254.165.169:2053           FAIL   -        eu
-2026-05-26T03:30:11.457812  195.254.165.23:9443            FAIL   -        eu
-2026-05-26T03:30:11.460456  iran.quickdl.info.:443         FAIL   -        eu
-2026-05-26T03:30:11.460473  total.beyondeson-co.cfd:443    FAIL   -        eu
-2026-05-26T03:30:11.460658  www.qatar-railways.info.:443   FAIL   -        eu
-2026-05-26T03:30:11.463430  general.irancell-ir.cfd:443    FAIL   -        eu
-2026-05-26T03:30:11.464418  rus1.mtproxygram.pro:443       FAIL   -        ru
-2026-05-26T03:30:11.467227  tavakalta-alalah.info:443      FAIL   -        eu
-2026-05-26T03:30:11.471405  185.3.200.186:2054             FAIL   -        eu
-2026-05-26T03:30:11.472671  tee.mobemouy.com:443           FAIL   -        eu
-2026-05-26T03:30:11.475413  Masi.zban-df.info:8888         FAIL   -        eu
-2026-05-26T03:30:11.476413  reboot.tikla.info:443          FAIL   -        eu
-2026-05-26T03:30:11.494885  khoda.hafez.info:443           FAIL   -        eu
-2026-05-26T03:30:11.494906  yazdan.htop.info:443           FAIL   -        eu
-2026-05-26T03:30:11.500405  paitakht.arasto.info:443       FAIL   -        eu
-2026-05-26T03:30:11.521652  World-press.Online-shop.speeker-voice.avadox-zhoan.info:144 FAIL   -        eu
-2026-05-26T03:30:11.594137  185.147.127.50:443             FAIL   -        eu
-2026-05-26T03:30:11.595793  195.254.165.252:25565          FAIL   -        eu
-2026-05-26T03:30:11.600414  195.254.165.247:25565          FAIL   -        eu
-2026-05-26T03:30:11.605812  195.254.165.250:25565          FAIL   -        eu
-2026-05-26T03:30:11.607411  185.117.0.248:443              FAIL   -        eu
-2026-05-26T03:30:11.608413  195.254.165.253:25565          FAIL   -        eu
-2026-05-26T03:30:11.614539  87.248.132.99:8443             FAIL   -        eu
-2026-05-26T03:30:11.620420  www.beastmode.icu.:8888        FAIL   -        eu
-2026-05-26T03:30:11.623922  https-cdn-ddns.itdeveloper.info.:88 FAIL   -        eu
-2026-05-26T03:30:11.625301  iran.zibayi.shop.:888          FAIL   -        eu
-2026-05-26T03:30:11.640397  46.225.29.180:443              FAIL   -        eu
-2026-05-26T03:30:11.640480  152.232.8.182:443              FAIL   -        eu
-2026-05-26T03:30:11.641422  89.251.10.2:7443               FAIL   -        eu
-2026-05-26T03:30:11.654387  65.109.146.207:443             FAIL   -        eu
-2026-05-26T03:30:11.698272  www.lastingg.baby.:8888        FAIL   -        eu
-2026-05-26T03:30:11.810581  mt.nowabst.com:853             FAIL   -        eu
-2026-05-26T03:30:11.879714  app.aftabneta2.ir:85           FAIL   -        eu
-2026-05-26T03:30:15.893321  amoreszi.duckdns.org:443       OK     6.454s   eu
-2026-05-26T03:30:15.930293  hotmtpro2.duckdns.org:443      OK     6.303s   eu
+2026-05-26T07:37:32.161526  Komatso-Japan.www.google.com.ganool-com.info:300 FAIL   -        eu
+2026-05-26T07:37:32.164761  speed.chunkycorp.shop:443      FAIL   -        ru
+2026-05-26T07:37:32.166667  q.hq-1337.win:443              FAIL   -        ru
+2026-05-26T07:37:32.190605  Team.hafthashtgswreqetdgsrwrpi-esoiiisolfnwfsksjvwu-urishklfduiwoehv.info.:6773 FAIL   -        eu
+2026-05-26T07:37:32.191765  31.56.229.49:443               FAIL   -        eu
+2026-05-26T07:37:32.205285  dream.nolags.pw:443            FAIL   -        eu
+2026-05-26T07:37:32.234004  195.133.20.10:443              FAIL   -        eu
+2026-05-26T07:37:32.235284  23.88.51.230:443               OK     0.093s   eu
+2026-05-26T07:37:32.242141  178.105.150.126:443            OK     0.094s   eu
+2026-05-26T07:37:32.243815  195.133.20.10:443              FAIL   -        eu
+2026-05-26T07:37:32.244674  g.proxytg.space:8443           FAIL   -        eu
+2026-05-26T07:37:32.248172  91.107.255.20:2053             FAIL   -        eu
+2026-05-26T07:37:32.249523  Fuck-War.harcibasheokeye.ir:110 FAIL   -        eu
+2026-05-26T07:37:32.249660  146.103.104.26:443             FAIL   -        eu
+2026-05-26T07:37:32.249849  2.26.99.245:8443               OK     0.094s   eu
+2026-05-26T07:37:32.250020  62.60.228.136:443              OK     0.107s   ru
+2026-05-26T07:37:32.250970  syntax.ddnscdn.sbs.:443        OK     0.107s   eu
+2026-05-26T07:37:32.250982  87.248.132.2:443               FAIL   -        eu
+2026-05-26T07:37:32.252462  92.118.234.215:443             OK     0.11s    eu
+2026-05-26T07:37:32.252597  Q4.opt-meli.info:443           OK     0.108s   eu
+2026-05-26T07:37:32.253553  45.135.194.28:37               FAIL   -        eu
+2026-05-26T07:37:32.254878  s.proxytg.space:8443           FAIL   -        eu
+2026-05-26T07:37:32.255722  176.125.240.195:443            OK     0.11s    ru
+2026-05-26T07:37:32.255985  31.207.5.58:443                OK     0.11s    ru
+2026-05-26T07:37:32.261699  hop3.proxytg.space:443         FAIL   -        ru
+2026-05-26T07:37:32.261871  tproxy.monster:2053            OK     0.111s   ru
+2026-05-26T07:37:32.262878  tproxy.mom:8090                OK     0.109s   ru
+2026-05-26T07:37:32.263939  89.167.103.249:443             OK     0.118s   eu
+2026-05-26T07:37:32.264597  186.246.21.34:443              OK     0.1s     eu
+2026-05-26T07:37:32.268044  www.tproxy.ink:443             OK     0.113s   ru
+2026-05-26T07:37:32.279484  another.life.mambabot.net:4515 OK     0.131s   eu
+2026-05-26T07:37:32.281663  vaslshid.co.uk.:85             FAIL   -        eu
+2026-05-26T07:37:32.285481  https-cdn-ddns.itdeveloper.info.:88 FAIL   -        eu
+2026-05-26T07:37:32.288663  artt.proxytg.space:443         FAIL   -        ru
+2026-05-26T07:37:32.289407  dr1.dedus.pro:443              OK     0.135s   ru
+2026-05-26T07:37:32.293381  ader.dynoporo.com:443          FAIL   -        eu
+2026-05-26T07:37:32.300440  r1.proxytg.space:8443          FAIL   -        eu
+2026-05-26T07:37:32.302132  babs.proxytg.space:443         FAIL   -        eu
+2026-05-26T07:37:32.302555  s15.proxyru.top:993            OK     0.153s   eu
+2026-05-26T07:37:32.303247  hop2.proxytg.space:443         FAIL   -        ru
+2026-05-26T07:37:32.303781  Ashkoda-Best.gabrial-batistuta.shop:443 FAIL   -        eu
+2026-05-26T07:37:32.303906  m.proxytg.space:8443           FAIL   -        eu
+2026-05-26T07:37:32.312071  s11.neo-trading.org:993        OK     0.166s   eu
+2026-05-26T07:37:32.314916  3.masi.masi.zban-mas.info:8888 FAIL   -        eu
+2026-05-26T07:37:32.318190  dreams.nolags.pw:443           OK     0.158s   eu
+2026-05-26T07:37:32.335077  amoreszi.duckdns.org:443       OK     0.181s   eu
+2026-05-26T07:37:32.338158  89.35.131.217:443              OK     0.087s   ru
+2026-05-26T07:37:32.338699  www.tproxy.monster:2053        OK     0.18s    ru
+2026-05-26T07:37:32.340073  server-1.shustrik.world:443    OK     0.106s   ru
+2026-05-26T07:37:32.343890  195.133.20.10:443              FAIL   -        eu
+2026-05-26T07:37:32.346980  91.107.189.181:8443            OK     0.092s   eu
+2026-05-26T07:37:32.349792  s24.neo-trading.org:443        OK     0.105s   ru
+2026-05-26T07:37:32.350658  87.248.134.204:443             FAIL   -        eu
+2026-05-26T07:37:32.367624  rus2.mtproxygram.pro:443       FAIL   -        ru
+2026-05-26T07:37:32.370636  r7.proxytg.space:8443          OK     0.224s   eu
+2026-05-26T07:37:32.380034  alpinavpn.hatecens.cc:7443     OK     0.132s   eu
+2026-05-26T07:37:32.380144  178.105.141.172:443            OK     0.091s   eu
+2026-05-26T07:37:32.380677  weblog.forwarding-co.site:443  FAIL   -        eu
+2026-05-26T07:37:32.382905  Shoting.forwarding-co.site.:44300 FAIL   -        eu
+2026-05-26T07:37:32.386493  win.sosproxy.space:443         OK     0.227s   eu
+2026-05-26T07:37:32.388726  www.tproxy.mom:8090            OK     0.235s   ru
+2026-05-26T07:37:32.392236  186.246.16.232:443             FAIL   -        eu
+2026-05-26T07:37:32.392330  87.248.134.172:443             FAIL   -        eu
+2026-05-26T07:37:32.415970  s13.neo-trading.org:993        OK     0.162s   eu
+2026-05-26T07:37:32.425088  r6.proxytg.space:8443          OK     0.269s   eu
+2026-05-26T07:37:32.433057  tproxy.ink:443                 OK     0.286s   ru
+2026-05-26T07:37:32.457298  best-ruter.eyvazi-master.ir:9741 FAIL   -        eu
+2026-05-26T07:37:32.519319  www.humaontop.space:443        FAIL   -        eu
+2026-05-26T07:37:32.530345  mt.nowaboost.com:853           OK     0.373s   eu
+2026-05-26T07:37:32.590165  mt.nowabst.com:853             OK     0.443s   eu
+2026-05-26T07:37:32.596561  mt.nowabst.com:853             OK     0.454s   ru
+2026-05-26T07:37:34.144107  185.3.200.185:2053             FAIL   -        eu
+2026-05-26T07:37:34.145717  116.203.134.165:443            FAIL   -        eu
+2026-05-26T07:37:34.145734  195.254.165.169:2053           FAIL   -        eu
+2026-05-26T07:37:34.149093  176.65.135.65:23               FAIL   -        eu
+2026-05-26T07:37:34.149497  91.107.155.175:2053            FAIL   -        eu
+2026-05-26T07:37:34.150540  195.254.165.251:25565          FAIL   -        eu
+2026-05-26T07:37:34.150557  195.254.165.250:25565          FAIL   -        eu
+2026-05-26T07:37:34.151528  72.56.41.35:443                FAIL   -        eu
+2026-05-26T07:37:34.152502  82.114.228.74:443              FAIL   -        ru
+2026-05-26T07:37:34.153475  152.232.8.182:443              FAIL   -        eu
+2026-05-26T07:37:34.153746  91.239.192.154:7443            FAIL   -        eu
+2026-05-26T07:37:34.153821  91.239.192.153:9443            FAIL   -        eu
+2026-05-26T07:37:34.153908  195.254.165.233:65535          FAIL   -        eu
+2026-05-26T07:37:34.153954  195.254.165.212:9443           FAIL   -        eu
+2026-05-26T07:37:34.155514  163.5.31.10:8443               FAIL   -        eu
+2026-05-26T07:37:34.155538  87.248.132.34:70               FAIL   -        eu
+2026-05-26T07:37:34.156494  185.84.157.102:9443            FAIL   -        eu
+2026-05-26T07:37:34.156550  195.254.165.249:25565          FAIL   -        eu
+2026-05-26T07:37:34.157476  194.120.230.106:433            FAIL   -        eu
+2026-05-26T07:37:34.158510  89.251.10.2:7443               FAIL   -        eu
+2026-05-26T07:37:34.158602  195.254.165.71:9443            FAIL   -        eu
+2026-05-26T07:37:34.158679  212.34.135.78:443              FAIL   -        eu
+2026-05-26T07:37:34.158694  185.117.0.248:443              FAIL   -        eu
+2026-05-26T07:37:34.160524  77.72.80.82:9443               FAIL   -        eu
+2026-05-26T07:37:34.160544  93.183.88.188:443              FAIL   -        eu
+2026-05-26T07:37:34.161554  195.254.165.247:25565          FAIL   -        eu
+2026-05-26T07:37:34.161560  87.248.132.99:8443             FAIL   -        eu
+2026-05-26T07:37:34.161564  65.109.146.207:443             FAIL   -        eu
+2026-05-26T07:37:34.162511  185.3.200.186:2054             FAIL   -        eu
+2026-05-26T07:37:34.162542  185.3.200.136:4455             FAIL   -        eu
+2026-05-26T07:37:34.164478  rus1.mtproxygram.pro:443       FAIL   -        ru
+2026-05-26T07:37:34.165481  dr4.dedus.pro:443              FAIL   -        ru
+2026-05-26T07:37:34.166475  general.irancell-ir.cfd:443    FAIL   -        eu
+2026-05-26T07:37:34.166538  reboot.tikla.info:443          FAIL   -        eu
+2026-05-26T07:37:34.166580  iran.quickdl.info.:443         FAIL   -        eu
+2026-05-26T07:37:34.168490  195.254.165.252:25565          FAIL   -        eu
+2026-05-26T07:37:34.168544  new.sitemcinet.co.uk:443       FAIL   -        eu
+2026-05-26T07:37:34.170468  total.beyondeson-co.cfd:443    FAIL   -        eu
+2026-05-26T07:37:34.175480  World-press.Online-shop.speeker-voice.avadox-zhoan.info:144 FAIL   -        eu
+2026-05-26T07:37:34.179480  www.merco-karco.website:443    FAIL   -        eu
+2026-05-26T07:37:34.182479  yazdan.htop.info:443           FAIL   -        eu
+2026-05-26T07:37:34.193486  5.75.197.246:443               FAIL   -        eu
+2026-05-26T07:37:34.206500  khoda.hafez.info:443           FAIL   -        eu
+2026-05-26T07:37:34.220102  paitakht.arasto.info:443       FAIL   -        eu
+2026-05-26T07:37:34.231069  dns.vdl.lat:853                FAIL   -        ru
+2026-05-26T07:37:34.254717  195.254.165.168:9443           FAIL   -        eu
+2026-05-26T07:37:34.254835  195.254.165.73:9443            FAIL   -        eu
+2026-05-26T07:37:34.258110  185.3.200.191:2053             FAIL   -        eu
+2026-05-26T07:37:34.264485  185.147.127.50:443             FAIL   -        eu
+2026-05-26T07:37:34.266963  www.beastmode.icu.:8888        FAIL   -        eu
+2026-05-26T07:37:34.269475  195.254.165.23:9443            FAIL   -        eu
+2026-05-26T07:37:34.274818  sabr.ssboriat.co.uk:531        FAIL   -        eu
+2026-05-26T07:37:34.279728  www.lastingg.baby.:8888        FAIL   -        eu
+2026-05-26T07:37:34.279781  www.myssscript.beauty.:8888    FAIL   -        eu
+2026-05-26T07:37:34.283481  tee.mobemouy.com:443           FAIL   -        eu
+2026-05-26T07:37:34.287580  87.248.132.38:85               FAIL   -        eu
+2026-05-26T07:37:34.302565  195.254.165.253:25565          FAIL   -        eu
+2026-05-26T07:37:34.303474  195.254.165.211:4455           FAIL   -        eu
+2026-05-26T07:37:34.304508  185.3.200.172:2053             FAIL   -        eu
+2026-05-26T07:37:34.304552  www.qatar-railways.info.:443   FAIL   -        eu
+2026-05-26T07:37:34.305476  46.225.29.180:443              FAIL   -        eu
+2026-05-26T07:37:34.305904  Masi.zban-df.info:8888         FAIL   -        eu
+2026-05-26T07:37:34.315788  iran.zibayi.shop.:888          FAIL   -        eu
+2026-05-26T07:37:34.325502  tavakalta-alalah.info:443      FAIL   -        eu
+2026-05-26T07:37:34.327474  app.aftabneta2.ir:85           FAIL   -        eu
+2026-05-26T07:37:34.377739  sitemcinet.co.uk:443           FAIL   -        eu
+2026-05-26T07:37:34.394774  collider.web-yektanet-com.info:443 FAIL   -        eu
+2026-05-26T07:37:34.561456  dd.tgproxy.today:8080          FAIL   -        eu
+2026-05-26T07:37:36.202627  hotmtpro2.duckdns.org:443      OK     3.952s   eu
+2026-05-26T07:37:36.426177  plg-proxy.duckdns.org:9443     FAIL   -        eu
 ------------------------------------------------------------
 
 Top 20 fastest proxies:
-  186.246.21.34:443 | ping=0.144s | eu | 
-  89.35.131.217:443 | ping=0.148s | ru | !@o2s:www.yandex.ru
-  tproxy.ink:443 | ping=0.15s | ru | dbiz ]avito.ru
-  178.105.150.126:443 | ping=0.151s | eu | km`k5>e[googleapis.com
-  Q4.opt-meli.info:443 | ping=0.153s | eu | }>r@c'media.steampowered.com
-  www.tproxy.ink:443 | ping=0.153s | ru | dbiz ]avito.ru
-  23.88.51.230:443 | ping=0.155s | eu | 
-  2.26.99.245:8443 | ping=0.155s | eu | &4a#eg4#iet2.26.99.245
-  91.107.189.181:8443 | ping=0.156s | eu | 
-  178.105.141.172:443 | ping=0.16s | eu | a#z2:googleapis.com
-  tproxy.mom:8090 | ping=0.161s | ru | dbiz ]avito.ru
-  92.118.234.215:443 | ping=0.162s | eu | 
-  31.207.5.58:443 | ping=0.164s | ru | a{,gmax.ru
-  62.60.228.136:443 | ping=0.167s | ru | og=+fuayandex.ru
-  dr1.dedus.pro:443 | ping=0.168s | ru | pjdi-yandex.ru
-  dr4.dedus.pro:443 | ping=0.168s | ru | pjdi-yandex.ru
-  another.life.mambabot.net:4515 | ping=0.168s | eu | d3u9a248.e.akamai.net
-  server-1.shustrik.world:443 | ping=0.169s | ru | s[."<vnvkvideo.ru
-  176.125.240.195:443 | ping=0.175s | ru | ia+rifewww.yandex.ru
-  alpinavpn.hatecens.cc:7443 | ping=0.177s | eu | %jl*l_alpinavpn.hatecens.cc
+  89.35.131.217:443 | ping=0.087s | ru | !@o2s:www.yandex.ru
+  178.105.141.172:443 | ping=0.091s | eu | a#z2:googleapis.com
+  91.107.189.181:8443 | ping=0.092s | eu | 
+  23.88.51.230:443 | ping=0.093s | eu | 
+  178.105.150.126:443 | ping=0.094s | eu | km`k5>e[googleapis.com
+  2.26.99.245:8443 | ping=0.094s | eu | &4a#eg4#iet2.26.99.245
+  186.246.21.34:443 | ping=0.1s | eu | 
+  s24.neo-trading.org:443 | ping=0.105s | ru | ztl{5\\nya.ru
+  server-1.shustrik.world:443 | ping=0.106s | ru | s[."<vnvkvideo.ru
+  62.60.228.136:443 | ping=0.107s | ru | og=+fuayandex.ru
+  syntax.ddnscdn.sbs.:443 | ping=0.107s | eu | 
+  Q4.opt-meli.info:443 | ping=0.108s | eu | }>r@c'media.steampowered.com
+  tproxy.mom:8090 | ping=0.109s | ru | dbiz ]avito.ru
+  92.118.234.215:443 | ping=0.11s | eu | 
+  176.125.240.195:443 | ping=0.11s | ru | ia+rifewww.yandex.ru
+  31.207.5.58:443 | ping=0.11s | ru | a{,gmax.ru
+  tproxy.monster:2053 | ping=0.111s | ru | dbiz ]mail.ru
+  www.tproxy.ink:443 | ping=0.113s | ru | dbiz ]avito.ru
+  89.167.103.249:443 | ping=0.118s | eu | 
+  another.life.mambabot.net:4515 | ping=0.131s | eu | d3u9a248.e.akamai.net
