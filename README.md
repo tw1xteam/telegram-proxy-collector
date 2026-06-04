@@ -150,7 +150,9 @@ python main.py --api-id YOUR_API_ID --api-hash YOUR_API_HASH --top 200 --output-
 
 # 5. Помощь по аргументам
 python main.py --help
-⚠️ Для полной проверки (Telethon) необходимы API_ID и API_HASH. Их можно получить на my.telegram.org.
+Для полной проверки (Telethon) необходимы API_ID и API_HASH. Их можно получить на my.telegram.org.
+
+Для полной проверки (Telethon) необходимы API_ID и API_HASH. Их можно получить на my.telegram.org.
 
 ⚠️ Дисклеймер и безопасность
 Этот репозиторий не гарантирует анонимность, невозможность слежки или защищённость от компрометации.
