@@ -1,4 +1,5 @@
-# MTProto RU (1)
-# Updated: 2026-06-10 17:55:48.149327+00:00
+# MTProto RU (2)
+# Updated: 2026-06-10 20:15:28.756118+00:00
 
 tg://proxy?server=ge.nowabst.net&port=853&secret=eefdf6175e50069c01bd22d786534aa2b26164732e78352e7275
+tg://proxy?server=15.chunkycorp.shop&port=443&secret=ee6a0333c1db3f8eaba5c76731a44203b6617669746f2e7275
