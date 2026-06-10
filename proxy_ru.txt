@@ -1,4 +1,4 @@
 # MTProto RU (1)
-# Updated: 2026-06-10 11:32:52.441401+00:00
+# Updated: 2026-06-10 14:57:22.303200+00:00
 
 tg://proxy?server=15.chunkycorp.shop&port=443&secret=ee6a0333c1db3f8eaba5c76731a44203b6617669746f2e7275
