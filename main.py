@@ -124,6 +124,21 @@ def get_proxies_from_text(text):
                         if 'socks5' in str(item).lower() and ('ip' in item or 'host' in item) and 'port' in item:
                             proxies.add(('socks5', item.get('ip') or item.get('host'), int(item['port']), (None, None)))
         except: pass
+    
+    # YAML парсинг (для all.yaml и подобных)
+    if text.strip().startswith('proxies:'):
+        try:
+            import yaml
+            data = yaml.safe_load(text)
+            if isinstance(data, dict) and 'proxies' in data:
+                for item in data['proxies']:
+                    if item.get('type') == 'socks5':
+                        server = item.get('server')
+                        port = item.get('port')
+                        if server and port and _valid_port(str(port)):
+                            proxies.add(('socks5', server, int(port), (None, None)))
+        except Exception as e:
+            pass
     return proxies
 
 def decode_domain(secret):
