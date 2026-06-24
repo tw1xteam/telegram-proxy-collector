@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# MTProto & SOCKS5 Proxy Collector v3.1 (Quality Boost)
+# MTProto & SOCKS5 Proxy Collector v3.1 (Quality Boost + SOCKS5 limit)
 
 import requests
 import re
@@ -28,7 +28,10 @@ except ImportError:
 API_ID   = os.environ.get("MTPROXY_API_ID")
 API_HASH = os.environ.get("MTPROXY_API_HASH")
 
-# ---------- MTProto источники (очищены от мусора) ----------
+# ---------- Ограничение на количество SOCKS5 для проверки ----------
+MAX_SOCKS5_TO_CHECK = 50000   # можно изменить при необходимости
+
+# ---------- MTProto источники ----------
 SOURCES = [
     "https://raw.githubusercontent.com/SoliSpirit/mtproto/master/all_proxies.txt",
     "https://raw.githubusercontent.com/Grim1313/mtproto-for-telegram/refs/heads/master/all_proxies.txt",
@@ -101,7 +104,6 @@ def _cleanup_session(host, port, delay=0.5):
 
 def _prepare_secret(s):
     s = s.strip()
-    # Поддержка URL-safe base64
     s = s.replace('-', '+').replace('_', '/')
     if all(c in '0123456789abcdefABCDEF' for c in s):
         return bytes.fromhex(s)
@@ -320,7 +322,6 @@ def deduplicate_and_sort(proxies, max_ping=3.0):
         if key not in seen:
             seen.add(key)
             unique.append(p)
-    # Фильтрация по пингу
     filtered = [p for p in unique if p['ping'] <= max_ping]
     filtered.sort(key=lambda x: (0 if (x['type']=='mtproto' and x.get('probe_resistant',False)) else 1 if x['type']=='mtproto' else 2, x['ping']))
     return filtered
@@ -344,7 +345,7 @@ async def main_async(args):
     if args.api_id: API_ID = args.api_id
     if args.api_hash: API_HASH = args.api_hash
     start = time.time()
-    print('🚀 MTProxy Collector v3.1 (Quality Boost)')
+    print('🚀 MTProxy Collector v3.1 (Quality Boost + SOCKS5 limit)')
     print('='*48)
     os.makedirs(args.output_dir, exist_ok=True)
 
@@ -376,7 +377,27 @@ async def main_async(args):
     if args.channel:
         all_raw.update(await fetch_proxies_from_channel(args.channel, args.channel_limit))
 
-    print(f'\n🧩 Уникальных прокси всего: {len(all_raw)}')
+    # ---------- ОГРАНИЧЕНИЕ КОЛИЧЕСТВА SOCKS5 ----------
+    # Разделяем MTProto и SOCKS5, ограничиваем SOCKS5 до MAX_SOCKS5_TO_CHECK
+    mtproto_set = set()
+    socks5_set = set()
+    for p in all_raw:
+        if p[0] == 'mtproto':
+            mtproto_set.add(p)
+        else:
+            socks5_set.add(p)
+
+    if len(socks5_set) > MAX_SOCKS5_TO_CHECK:
+        # Превращаем во временный список, берём первые N элементов (порядок не важен)
+        socks5_list = list(socks5_set)
+        socks5_limited = set(socks5_list[:MAX_SOCKS5_TO_CHECK])
+        print(f"⚠️ SOCKS5 ограничены: {len(socks5_set)} → {len(socks5_limited)} (лимит {MAX_SOCKS5_TO_CHECK})")
+        socks5_set = socks5_limited
+
+    all_raw = mtproto_set.union(socks5_set)
+    # ------------------------------------------------
+
+    print(f'\n🧩 Уникальных прокси всего: {len(all_raw)} (MTProto: {len(mtproto_set)}, SOCKS5: {len(socks5_set)})')
     if not all_raw:
         print('\n⚠️ Нет прокси. Завершение.')
         return
@@ -417,10 +438,8 @@ async def main_async(args):
         print('\n⚠️ Рабочих прокси не найдено.')
         return
 
-    # Дедупликация, сортировка и фильтрация по пингу
     valid = deduplicate_and_sort(valid, args.max_ping)
 
-    # Для RU-прокси оставляем только probe_resistant
     mtproto_ru = [x for x in valid if x['type']=='mtproto' and x['region']=='ru' and x.get('probe_resistant', False)]
     mtproto_eu = [x for x in valid if x['type']=='mtproto' and x['region']=='eu']
     socks5 = [x for x in valid if x['type']=='socks5']
@@ -441,7 +460,6 @@ async def main_async(args):
     with open(f'{args.output_dir}/proxy_all_verified.json','w') as f:
         json.dump(valid[:top], f, indent=2)
 
-    # корневые файлы
     with open('proxy_ru.txt','w') as f: f.write('\n'.join(x['link'] for x in mtproto_ru[:top]))
     with open('proxy_eu.txt','w') as f: f.write('\n'.join(x['link'] for x in mtproto_eu[:top]))
     with open('proxy_all.txt','w') as f: f.write('\n'.join(x['link'] for x in (mtproto_ru+mtproto_eu)[:top]))
