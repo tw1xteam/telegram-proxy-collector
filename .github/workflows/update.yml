@@ -14,7 +14,7 @@ jobs:
       with:
         python-version: '3.11'
     - run: pip install requests telethon pyyaml
-    - run: python main.py --top 200
+    - run: python main.py --top 100 --timeout 14 --workers 20 --channel @ProxyMTProto --channel-limit 150 --max-ping 3.0
       env:
         MTPROXY_API_ID: ${{ secrets.MTPROXY_API_ID }}
         MTPROXY_API_HASH: ${{ secrets.MTPROXY_API_HASH }}
@@ -23,6 +23,10 @@ jobs:
         cp verified/proxy_eu_verified.txt proxy_eu.txt
         cp verified/proxy_all_verified.txt proxy_all.txt
         cp verified/socks5_proxies.txt socks5.txt || true
+    - run: |
+        echo "✅ MTProto RU: $(wc -l < proxy_ru.txt)"
+        echo "✅ MTProto EU: $(wc -l < proxy_eu.txt)"
+        echo "✅ SOCKS5: $(wc -l < socks5.txt)"
     - run: |
         git config user.name "Proxy Bot"
         git config user.email "bot@github.com"
