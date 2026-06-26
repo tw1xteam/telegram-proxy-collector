@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# MTProto & SOCKS5 Proxy Collector v3.8.5 (Final secret fix)
+# MTProto & SOCKS5 Proxy Collector v3.8.6 (Stable + OpenSSL fix)
 
 import requests
 import re
@@ -117,15 +117,22 @@ def _prepare_secret(s):
     if re.fullmatch(r'[0-9a-fA-F]+', s):
         if len(s) % 2 != 0:
             return None
+        if len(s) < 16 or len(s) > 128:
+            return None  # слишком короткий или длинный
         try:
             return bytes.fromhex(s)
         except ValueError:
             return None
     # Base64
+    if len(s) < 16:
+        return None
     missing = (4 - len(s) % 4) % 4
     s += '=' * missing
     try:
-        return base64.b64decode(s)
+        result = base64.b64decode(s)
+        if len(result) < 16 or len(result) > 128:
+            return None
+        return result
     except Exception:
         return None
 
@@ -237,15 +244,16 @@ async def check_mtproto(p, timeout_sec=30.0):
     if _is_blocked(secret, domain):
         return None
 
-    # 🚀 Основное изменение: определяем, какой секрет передавать Telethon
-    # Если секрет — hex-строка, передаём его как строку, иначе декодируем в байты.
+    # Проверяем секрет до передачи в Telethon
+    secret_bytes = _prepare_secret(secret)
+    if secret_bytes is None:
+        return None
+
+    # Если секрет — hex, передаём строку, иначе байты
     if re.fullmatch(r'[0-9a-fA-F]+', secret):
-        proxy_secret = secret  # строка (hex)
+        proxy_secret = secret
     else:
-        secret_bytes = _prepare_secret(secret)
-        if secret_bytes is None:
-            return None
-        proxy_secret = secret_bytes  # байты
+        proxy_secret = secret_bytes
 
     client = TelegramClient(
         MemorySession(),
@@ -261,8 +269,24 @@ async def check_mtproto(p, timeout_sec=30.0):
 
     start = time.time()
     try:
-        await asyncio.wait_for(client.connect(), timeout=timeout_sec)
-        await asyncio.wait_for(client.get_me(), timeout=timeout_sec)
+        # Оборачиваем connect и get_me в try для перехвата OpenSSL-ошибок
+        try:
+            await asyncio.wait_for(client.connect(), timeout=timeout_sec)
+            await asyncio.wait_for(client.get_me(), timeout=timeout_sec)
+        except (ConnectionError, BrokenPipeError, OSError, ValueError) as e:
+            if not DEBUG_PRINTED:
+                DEBUG_PRINTED = True
+                print(f"⚠️ Ошибка протокола для {host}:{port} – {type(e).__name__}: {str(e)[:80]}")
+            return None
+        except Exception as e:
+            # Проверяем, не связана ли ошибка с OpenSSL (AES)
+            if "AES" in type(e).__name__ or "OpenSSL" in str(e) or "crypto" in str(e).lower():
+                if not DEBUG_PRINTED:
+                    DEBUG_PRINTED = True
+                    print(f"⚠️ Крипто-ошибка для {host}:{port} – {type(e).__name__}: {str(e)[:80]}")
+                return None
+            raise  # другие ошибки пробрасываем
+
         ping = round(time.time() - start, 3)
         return {
             'type': 'mtproto', 'host': host, 'port': port, 'secret': secret,
@@ -381,7 +405,7 @@ async def main_async(args):
     if args.api_hash: API_HASH = args.api_hash
     start = time.time()
     DEBUG_PRINTED = False
-    print('🚀 MTProxy Collector v3.8.5 (Final secret fix)')
+    print('🚀 MTProxy Collector v3.8.6 (Stable + OpenSSL fix)')
     print('=' * 48)
     os.makedirs(args.output_dir, exist_ok=True)
 
@@ -517,7 +541,7 @@ async def main_async(args):
 def main():
     p = argparse.ArgumentParser()
     p.add_argument('--timeout', type=float, default=2.0)
-    p.add_argument('--timeout-mt', type=float, default=30.0)
+    p.add_argument('--timeout-mt', type=float, default=25.0)  # уменьшил до 25 для баланса
     p.add_argument('--timeout-socks', type=float, default=3.0)
     p.add_argument('--workers', type=int, default=200)
     p.add_argument('--workers-socks', type=int, default=300)
