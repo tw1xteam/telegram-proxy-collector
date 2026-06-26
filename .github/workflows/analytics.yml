@@ -10,7 +10,6 @@ on:
 jobs:
   analyze:
     runs-on: ubuntu-latest
-    # Исправлено: условие работает и для workflow_dispatch, и для workflow_run
     if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     steps:
     - uses: actions/checkout@v4
@@ -27,12 +26,9 @@ jobs:
     - name: Run core analytics
       run: python analytics.py
     
-    - name: Run AI analytics with LLM
+    - name: Run AI analytics (Groq/README update)
       env:
-        XAI_API_KEY: ${{ secrets.XAI_API_KEY }}
-        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         TELEGRAMPROXYCOLLECTOR: ${{ secrets.TELEGRAMPROXYCOLLECTOR }}
-        LLM_PROVIDER: ${{ secrets.LLM_PROVIDER || 'auto' }}
       run: python ai_analytics.py
     
     - name: Commit analytics results
