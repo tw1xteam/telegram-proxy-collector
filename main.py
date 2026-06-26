@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# MTProto & SOCKS5 Proxy Collector v3.8.3 (Final stable)
+# MTProto & SOCKS5 Proxy Collector v3.8.5 (Final secret fix)
 
 import requests
 import re
@@ -99,14 +99,21 @@ def _detect_region(domain):
     return 'ru' if domain and any(m in domain for m in RU_DOMAINS) else 'eu'
 
 def _prepare_secret(s):
+    # Универсальное приведение к строке
+    if isinstance(s, memoryview):
+        s = s.tobytes()
     if isinstance(s, (bytes, bytearray)):
         try:
             s = s.decode('utf-8')
         except UnicodeDecodeError:
             return None
     if not isinstance(s, str):
-        return None
+        try:
+            s = str(s)
+        except Exception:
+            return None
     s = s.strip().replace('-', '+').replace('_', '/')
+    # Проверка на hex
     if re.fullmatch(r'[0-9a-fA-F]+', s):
         if len(s) % 2 != 0:
             return None
@@ -114,6 +121,7 @@ def _prepare_secret(s):
             return bytes.fromhex(s)
         except ValueError:
             return None
+    # Base64
     missing = (4 - len(s) % 4) % 4
     s += '=' * missing
     try:
@@ -212,34 +220,48 @@ def check_socks5_fast(host, port, timeout=3.0):
 async def check_mtproto(p, timeout_sec=30.0):
     global DEBUG_PRINTED
     _, host, port, secret = p
+
+    # Приводим secret к строке
     if isinstance(secret, bytes):
         try:
             secret = secret.decode('utf-8')
         except UnicodeDecodeError:
             return None
+    if not isinstance(secret, str):
+        try:
+            secret = str(secret)
+        except Exception:
+            return None
+
     domain = decode_domain(secret)
     if _is_blocked(secret, domain):
         return None
-    secret_bytes = _prepare_secret(secret)
-    if secret_bytes is None:
-        return None
+
+    # 🚀 Основное изменение: определяем, какой секрет передавать Telethon
+    # Если секрет — hex-строка, передаём его как строку, иначе декодируем в байты.
+    if re.fullmatch(r'[0-9a-fA-F]+', secret):
+        proxy_secret = secret  # строка (hex)
+    else:
+        secret_bytes = _prepare_secret(secret)
+        if secret_bytes is None:
+            return None
+        proxy_secret = secret_bytes  # байты
 
     client = TelegramClient(
         MemorySession(),
         API_ID, API_HASH,
         connection=ConnectionTcpMTProxyRandomizedIntermediate,
-        proxy=(host, int(port), secret_bytes),
+        proxy=(host, int(port), proxy_secret),
         timeout=timeout_sec,
         request_retries=0,
         connection_retries=0,
         retry_delay=0,
         auto_reconnect=False,
     )
-    # ⚡ start объявлен ДО try, чтобы быть доступным в except RPCError
+
     start = time.time()
     try:
         await asyncio.wait_for(client.connect(), timeout=timeout_sec)
-        # Реальный запрос к Telegram — если доходит, прокси рабочий
         await asyncio.wait_for(client.get_me(), timeout=timeout_sec)
         ping = round(time.time() - start, 3)
         return {
@@ -255,7 +277,6 @@ async def check_mtproto(p, timeout_sec=30.0):
         print(f"⚠️ FloodWait для {host}:{port} – {e.seconds}с")
         return None
     except RPCError:
-        # RPCError означает, что запрос дошёл до Telegram, прокси работает
         ping = round(time.time() - start, 3)
         return {
             'type': 'mtproto', 'host': host, 'port': port, 'secret': secret,
@@ -360,7 +381,7 @@ async def main_async(args):
     if args.api_hash: API_HASH = args.api_hash
     start = time.time()
     DEBUG_PRINTED = False
-    print('🚀 MTProxy Collector v3.8.3 (Final stable)')
+    print('🚀 MTProxy Collector v3.8.5 (Final secret fix)')
     print('=' * 48)
     os.makedirs(args.output_dir, exist_ok=True)
 
