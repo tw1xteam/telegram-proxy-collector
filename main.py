@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# MTProto & SOCKS5 Proxy Collector v3.7 (Lite with blacklist)
+# MTProto & SOCKS5 Proxy Collector v3.8 (Ultra Light + fix + debug)
 
 import requests
 import re
@@ -85,22 +85,22 @@ SOCKS_SOURCES = [
     "https://raw.githubusercontent.com/ProxyScrape/free-proxy-list/refs/heads/main/proxies/protocols/socks5/data.txt",
 ]
 
-TIMEOUT = 2.0  # TCP fallback
+TIMEOUT = 2.0  # только для TCP fallback
 RU_DOMAINS = ['.ru', 'yandex', 'vk.com', 'mail.ru', 'ok.ru', 'dzen', 'rutube', 'sber',
               'tinkoff', 'vtb', 'gosuslugi', 'nalog', 'mos.ru', 'ozon', 'wildberries',
               'avito', 'kinopoisk', 'mts', 'beeline']
-# Чёрный список – оставляем, чтобы не брать прокси с маскировкой под заблокированные ресурсы
 BLOCKED = ['instagram', 'facebook', 'twitter', 'bbc', 'meduza', 'linkedin', 'torproject']
+
+DEBUG_PRINTED = False  # флаг, чтобы напечатать только первую ошибку
 
 def _valid_port(p): return 1 <= int(p) <= 65535
 def _is_blocked(secret, domain):
-    # Отбрасываем слишком короткие секреты и прокси с запрещёнными доменами
     return len(secret) < 16 or (domain and any(b in domain for b in BLOCKED))
 def _detect_region(domain):
     return 'ru' if domain and any(m in domain for m in RU_DOMAINS) else 'eu'
 
 def _prepare_secret(s):
-    # Исправлено: если пришло bytes – преобразуем в строку
+    # Принудительно приводим к строке
     if isinstance(s, bytes):
         s = s.decode('utf-8')
     s = s.strip().replace('-', '+').replace('_', '/')
@@ -156,6 +156,8 @@ def get_proxies_from_text(text):
     return proxies
 
 def decode_domain(secret):
+    if isinstance(secret, bytes):
+        secret = secret.decode('utf-8')
     if not secret.startswith('ee'): return None
     try:
         chars = []
@@ -194,15 +196,22 @@ def check_socks5_fast(host, port, timeout=3.0):
     except:
         return False
 
-# ── ЛЁГКАЯ ПРОВЕРКА MTProto (только connect, без get_config) ──────────────
+# ── MTProto проверка с отладочным выводом ──────────────────────────────────
 async def check_mtproto(p, timeout_sec=20.0):
+    global DEBUG_PRINTED
     _, host, port, secret = p
+    # Приводим секрет к строке
+    if isinstance(secret, bytes):
+        secret = secret.decode('utf-8')
     domain = decode_domain(secret)
     if _is_blocked(secret, domain):
         return None
     try:
         secret_bytes = _prepare_secret(secret)
-    except:
+    except Exception as e:
+        if not DEBUG_PRINTED:
+            DEBUG_PRINTED = True
+            print(f"⚠️ Ошибка декодирования секрета для {host}:{port} – {type(e).__name__}: {str(e)[:80]}")
         return None
 
     client = TelegramClient(
@@ -219,7 +228,6 @@ async def check_mtproto(p, timeout_sec=20.0):
     try:
         start = time.time()
         await asyncio.wait_for(client.connect(), timeout=timeout_sec)
-        # Подключились – считаем рабочим
         ping = round(time.time() - start, 3)
         return {
             'type': 'mtproto', 'host': host, 'port': port, 'secret': secret,
@@ -228,7 +236,10 @@ async def check_mtproto(p, timeout_sec=20.0):
             'domain': domain or '', 'method': 'Telethon_OK',
             'probe_resistant': False,
         }
-    except:
+    except Exception as e:
+        if not DEBUG_PRINTED:
+            DEBUG_PRINTED = True
+            print(f"⚠️ Ошибка подключения для {host}:{port} – {type(e).__name__}: {str(e)[:80]}")
         return None
     finally:
         try:
@@ -263,6 +274,8 @@ def check_proxy_tcp(p):
     typ, host, port, extra = p
     if typ == 'mtproto':
         secret = extra
+        if isinstance(secret, bytes):
+            secret = secret.decode('utf-8')
         domain = decode_domain(secret)
         if _is_blocked(secret, domain): return None
         link = f'tg://proxy?server={host}&port={port}&secret={secret}'
@@ -315,7 +328,7 @@ async def main_async(args):
     if args.api_id: API_ID = args.api_id
     if args.api_hash: API_HASH = args.api_hash
     start = time.time()
-    print('🚀 MTProxy Collector v3.7 (Lite with blacklist)')
+    print('🚀 MTProxy Collector v3.8 (Ultra Light + fix + debug)')
     print('=' * 48)
     os.makedirs(args.output_dir, exist_ok=True)
 
