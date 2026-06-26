@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# MTProto & SOCKS5 Proxy Collector v3.8 (Ultra Light + fix + debug)
+# MTProto & SOCKS5 Proxy Collector v3.8.3 (Fixed counters + secret parsing)
 
 import requests
 import re
@@ -18,7 +18,7 @@ from telethon.sessions import MemorySession
 
 try:
     from telethon import TelegramClient
-    from telethon.errors import FloodWaitError
+    from telethon.errors import FloodWaitError, RPCError
     TELETHON_AVAILABLE = True
 except ImportError:
     TELETHON_AVAILABLE = False
@@ -29,7 +29,6 @@ API_HASH = os.environ.get("MTPROXY_API_HASH")
 
 MAX_SOCKS5_TO_CHECK = 20000
 
-# ── источники (те же) ────────────────────────────────────────────────────────
 SOURCES = [
     "https://raw.githubusercontent.com/SoliSpirit/mtproto/master/all_proxies.txt",
     "https://raw.githubusercontent.com/Grim1313/mtproto-for-telegram/refs/heads/master/all_proxies.txt",
@@ -85,13 +84,13 @@ SOCKS_SOURCES = [
     "https://raw.githubusercontent.com/ProxyScrape/free-proxy-list/refs/heads/main/proxies/protocols/socks5/data.txt",
 ]
 
-TIMEOUT = 2.0  # только для TCP fallback
+TIMEOUT = 2.0
 RU_DOMAINS = ['.ru', 'yandex', 'vk.com', 'mail.ru', 'ok.ru', 'dzen', 'rutube', 'sber',
               'tinkoff', 'vtb', 'gosuslugi', 'nalog', 'mos.ru', 'ozon', 'wildberries',
               'avito', 'kinopoisk', 'mts', 'beeline']
 BLOCKED = ['instagram', 'facebook', 'twitter', 'bbc', 'meduza', 'linkedin', 'torproject']
 
-DEBUG_PRINTED = False  # флаг, чтобы напечатать только первую ошибку
+DEBUG_PRINTED = False
 
 def _valid_port(p): return 1 <= int(p) <= 65535
 def _is_blocked(secret, domain):
@@ -100,16 +99,27 @@ def _detect_region(domain):
     return 'ru' if domain and any(m in domain for m in RU_DOMAINS) else 'eu'
 
 def _prepare_secret(s):
-    # Принудительно приводим к строке
     if isinstance(s, bytes):
-        s = s.decode('utf-8')
+        try:
+            s = s.decode('utf-8')
+        except UnicodeDecodeError:
+            return None
     s = s.strip().replace('-', '+').replace('_', '/')
+    # Hex-строка
     if all(c in '0123456789abcdefABCDEF' for c in s):
-        return bytes.fromhex(s)
-    missing = len(s) % 4
-    if missing:
-        s += '=' * (4 - missing)
-    return base64.b64decode(s)
+        if len(s) % 2 != 0:  # нечётная длина hex — невалид
+            return None
+        try:
+            return bytes.fromhex(s)
+        except ValueError:
+            return None
+    # Base64
+    missing = (4 - len(s) % 4) % 4  # исправленный паддинг
+    s += '=' * missing
+    try:
+        return base64.b64decode(s)
+    except Exception:
+        return None
 
 def get_proxies_from_text(text):
     proxies = set()
@@ -157,7 +167,10 @@ def get_proxies_from_text(text):
 
 def decode_domain(secret):
     if isinstance(secret, bytes):
-        secret = secret.decode('utf-8')
+        try:
+            secret = secret.decode('utf-8')
+        except UnicodeDecodeError:
+            return None
     if not secret.startswith('ee'): return None
     try:
         chars = []
@@ -196,22 +209,19 @@ def check_socks5_fast(host, port, timeout=3.0):
     except:
         return False
 
-# ── MTProto проверка с отладочным выводом ──────────────────────────────────
-async def check_mtproto(p, timeout_sec=20.0):
+async def check_mtproto(p, timeout_sec=30.0):
     global DEBUG_PRINTED
     _, host, port, secret = p
-    # Приводим секрет к строке
     if isinstance(secret, bytes):
-        secret = secret.decode('utf-8')
+        try:
+            secret = secret.decode('utf-8')
+        except UnicodeDecodeError:
+            return None
     domain = decode_domain(secret)
     if _is_blocked(secret, domain):
         return None
-    try:
-        secret_bytes = _prepare_secret(secret)
-    except Exception as e:
-        if not DEBUG_PRINTED:
-            DEBUG_PRINTED = True
-            print(f"⚠️ Ошибка декодирования секрета для {host}:{port} – {type(e).__name__}: {str(e)[:80]}")
+    secret_bytes = _prepare_secret(secret)
+    if secret_bytes is None:
         return None
 
     client = TelegramClient(
@@ -236,10 +246,21 @@ async def check_mtproto(p, timeout_sec=20.0):
             'domain': domain or '', 'method': 'Telethon_OK',
             'probe_resistant': False,
         }
+    except asyncio.TimeoutError:
+        if not DEBUG_PRINTED:
+            DEBUG_PRINTED = True
+            print(f"⚠️ Таймаут для {host}:{port} (>{timeout_sec}с)")
+        return None
+    except FloodWaitError as e:
+        print(f"⚠️ FloodWait для {host}:{port} – {e.seconds}с")
+        return None
+    except RPCError as e:
+        print(f"⚠️ RPC ошибка для {host}:{port} – {e}")
+        return None
     except Exception as e:
         if not DEBUG_PRINTED:
             DEBUG_PRINTED = True
-            print(f"⚠️ Ошибка подключения для {host}:{port} – {type(e).__name__}: {str(e)[:80]}")
+            print(f"⚠️ Ошибка для {host}:{port} – {type(e).__name__}: {str(e)[:100]}")
         return None
     finally:
         try:
@@ -275,7 +296,10 @@ def check_proxy_tcp(p):
     if typ == 'mtproto':
         secret = extra
         if isinstance(secret, bytes):
-            secret = secret.decode('utf-8')
+            try:
+                secret = secret.decode('utf-8')
+            except UnicodeDecodeError:
+                return None
         domain = decode_domain(secret)
         if _is_blocked(secret, domain): return None
         link = f'tg://proxy?server={host}&port={port}&secret={secret}'
@@ -323,12 +347,13 @@ def load_local_proxies(file_path):
     return proxies
 
 async def main_async(args):
-    global TIMEOUT, API_ID, API_HASH
+    global TIMEOUT, API_ID, API_HASH, DEBUG_PRINTED
     TIMEOUT = args.timeout
     if args.api_id: API_ID = args.api_id
     if args.api_hash: API_HASH = args.api_hash
     start = time.time()
-    print('🚀 MTProxy Collector v3.8 (Ultra Light + fix + debug)')
+    DEBUG_PRINTED = False
+    print('🚀 MTProxy Collector v3.8.3 (Fixed counters + secret parsing)')
     print('=' * 48)
     os.makedirs(args.output_dir, exist_ok=True)
 
@@ -369,7 +394,6 @@ async def main_async(args):
     mtproto_list = [p for p in all_raw if p[0] == 'mtproto']
     socks5_list  = [p for p in all_raw if p[0] == 'socks5']
 
-    # ── MTProto ──────────────────────────────────────────────────────────────
     if TELETHON_AVAILABLE and API_ID and API_HASH and mtproto_list:
         print(f'🔥 MTProto: Telethon (workers={args.workers}, timeout={args.timeout_mt}s)')
         sem = asyncio.Semaphore(args.workers)
@@ -377,13 +401,17 @@ async def main_async(args):
             async with sem:
                 return await check_mtproto(p, args.timeout_mt)
         tasks = [asyncio.create_task(check_one_mt(p)) for p in mtproto_list]
+
+        # ИСПРАВЛЕНО: отдельный счётчик проверенных, отдельно найденных
+        checked_mt = 0
         for task in asyncio.as_completed(tasks):
             res = await task
+            checked_mt += 1
             if res:
                 valid.append(res)
-            checked = len([v for v in valid if v['type'] == 'mtproto'])
-            if checked % 200 == 0 or checked == len(mtproto_list):
-                print(f'  MTProto: {checked}/{len(mtproto_list)} | найдено: {checked}')
+            found_mt = len([v for v in valid if v['type'] == 'mtproto'])
+            if checked_mt % 200 == 0 or checked_mt == len(mtproto_list):
+                print(f'  MTProto: {checked_mt}/{len(mtproto_list)} | найдено: {found_mt}')
     else:
         print('📡 MTProto: TCP fallback')
         with concurrent.futures.ThreadPoolExecutor(max_workers=args.workers) as ex:
@@ -393,13 +421,16 @@ async def main_async(args):
                 if res:
                     valid.append(res)
 
-    # ── SOCKS5 ──────────────────────────────────────────────────────────────
     if socks5_list:
         print(f'🔒 SOCKS5: TCP fast check (workers={args.workers_socks})')
         with concurrent.futures.ThreadPoolExecutor(max_workers=args.workers_socks) as ex:
             future_to_socks = {ex.submit(check_socks5_fast, h, int(p), args.timeout_socks): (h, p) for _, h, p, _ in socks5_list}
+
+            # ИСПРАВЛЕНО: отдельный счётчик проверенных, отдельно найденных
+            checked_s = 0
             for future in concurrent.futures.as_completed(future_to_socks):
                 host, port = future_to_socks[future]
+                checked_s += 1
                 if future.result():
                     valid.append({
                         'type': 'socks5', 'host': host, 'port': port,
@@ -407,9 +438,9 @@ async def main_async(args):
                         'ping': 0.1, 'region': 'eu', 'domain': '',
                         'method': 'TCP_SOCKS5_OK', 'probe_resistant': False
                     })
-                checked = len([v for v in valid if v['type'] == 'socks5'])
-                if checked % 500 == 0 or checked == len(socks5_list):
-                    print(f'  SOCKS5: {checked}/{len(socks5_list)} | найдено: {checked}')
+                found_s = len([v for v in valid if v['type'] == 'socks5'])
+                if checked_s % 500 == 0 or checked_s == len(socks5_list):
+                    print(f'  SOCKS5: {checked_s}/{len(socks5_list)} | найдено: {found_s}')
 
     if not valid:
         print('\n⚠️ Рабочих прокси не найдено.')
@@ -459,11 +490,11 @@ async def main_async(args):
 
 def main():
     p = argparse.ArgumentParser()
-    p.add_argument('--timeout', type=float, default=2.0, help='TCP таймаут для fallback')
-    p.add_argument('--timeout-mt', type=float, default=20.0, help='Таймаут для MTProto (сек)')
-    p.add_argument('--timeout-socks', type=float, default=3.0, help='Таймаут для SOCKS5 TCP')
-    p.add_argument('--workers', type=int, default=200, help='Воркеры для MTProto')
-    p.add_argument('--workers-socks', type=int, default=300, help='Воркеры для SOCKS5')
+    p.add_argument('--timeout', type=float, default=2.0)
+    p.add_argument('--timeout-mt', type=float, default=30.0)
+    p.add_argument('--timeout-socks', type=float, default=3.0)
+    p.add_argument('--workers', type=int, default=200)
+    p.add_argument('--workers-socks', type=int, default=300)
     p.add_argument('--top', type=int, default=0)
     p.add_argument('--output-dir', default='verified')
     p.add_argument('--manual')
