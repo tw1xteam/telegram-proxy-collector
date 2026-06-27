@@ -27,7 +27,7 @@ except ImportError:
 API_ID   = os.environ.get("MTPROXY_API_ID")
 API_HASH = os.environ.get("MTPROXY_API_HASH")
 
-MAX_SOCKS5_TO_CHECK = 20000
+MAX_SOCKS5_TO_CHECK = 2000
 
 SOURCES = [
     "https://raw.githubusercontent.com/SoliSpirit/mtproto/master/all_proxies.txt",
